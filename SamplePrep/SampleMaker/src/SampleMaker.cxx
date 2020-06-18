@@ -81,16 +81,7 @@ int main (int argc, char *argv[]) {
     float topoetcone30_over_pt; unnormedTree->Branch("baseline_topoetcone30_over_pt", &topoetcone30_over_pt, "baseline_topoetcone30_over_pt/F");
     float topoetcone40_over_pt; unnormedTree->Branch("baseline_topoetcone40_over_pt", &topoetcone40_over_pt, "baseline_topoetcone40_over_pt/F");
     float eflowcone20_over_pt; unnormedTree->Branch("baseline_eflowcone20_over_pt", &eflowcone20_over_pt, "baseline_eflowcone20_over_pt/F");
-    //float PLT; unnormedTree->Branch("baseline_PLT", &PLT, "baseline_PLT/F");
-
-	float calc_ptcone20; unnormedTree->Branch("calc_ptcone20", &calc_ptcone20, "calc_ptcone20/F");
-    float calc_ptcone30; unnormedTree->Branch("calc_ptcone30", &calc_ptcone30, "calc_ptcone30/F");
-    float calc_ptcone40; unnormedTree->Branch("calc_ptcone40", &calc_ptcone40, "calc_ptcone40/F");
-    float calc_ptvarcone20; unnormedTree->Branch("calc_ptvarcone20", &calc_ptvarcone20, "calc_ptvarcone20/F");
-    float calc_ptvarcone30; unnormedTree->Branch("calc_ptvarcone30", &calc_ptvarcone30, "calc_ptvarcone30/F");
-    float calc_ptvarcone40; unnormedTree->Branch("calc_ptvarcone40", &calc_ptvarcone40, "calc_ptvarcone40/F");
-
-
+    float PLT; unnormedTree->Branch("baseline_PLT", &PLT, "baseline_PLT/F");
 
     float lep_pT; unnormedTree->Branch("lep_pT", &lep_pT, "lep_pT/F");
     unnormedTree->Branch("ROC_slicing_lep_pT", &lep_pT, "ROC_slicing_lep_pT/F");  // for making ROC curve plots
@@ -162,9 +153,9 @@ int main (int argc, char *argv[]) {
             cout << cutflow_table[i][0] << " " << cutflow_table[i][1] << " " << cutflow_table[i][2] << " " << cutflow_table[i][3] << endl;
         }
     };
-    //TODO: uncomment if needed. 
+
     //--- Accessors
-    //SG::AuxElement::ConstAccessor<float> accessPromptVar("PromptLeptonVeto");
+    SG::AuxElement::ConstAccessor<float> accessPromptVar("PromptLeptonVeto");
 
     std::string FlvTagCutDefinitionsFileName = "/eos/atlas/atlascerngroupdisk/asg-calib/xAODBTaggingEfficiency/13TeV/2019-21-13TeV-MC16-CDI-2019-10-07_v1.root";
     std::string WP = "FixedCutBEff_77";
@@ -211,7 +202,7 @@ int main (int argc, char *argv[]) {
             muon->isolation(topoetcone40,xAOD::Iso::topoetcone40);
             muon->isolation(eflowcone20,xAOD::Iso::neflowisol20);
         };
-		
+
         //--- Retrieve all relevant lepton variables
         lep_pT = lepton->pt();
         lep_eta = lepton->eta();
@@ -221,7 +212,7 @@ int main (int argc, char *argv[]) {
         lep_d0_over_sigd0 = xAOD::TrackingHelpers::d0significance(track_particle);
         lep_z0 = track_particle->z0();
         lep_dz0 = track_particle->z0() - primary_vertex->z();
-        // PLT = accessPromptVar(*lepton);
+        PLT = accessPromptVar(*lepton);
         if (is_electron) process_electron_cones((const xAOD::Electron*)lepton);
         else process_muon_cones((const xAOD::Muon*)lepton);
 
@@ -289,43 +280,6 @@ int main (int argc, char *argv[]) {
         set<const xAOD::TrackParticle*> own_tracks;
         if (is_electron) own_tracks = get_electron_own_tracks((const xAOD::Electron*)lepton);
         else own_tracks = get_muon_own_tracks((const xAOD::Muon*)lepton);
-		
-		calc_ptcone20 = 0; calc_ptcone30 = 0; calc_ptcone40 = 0; calc_ptvarcone20 = 0; calc_ptvarcone30 = 0; calc_ptvarcone40 = 0;
-		float var_R_20 = std::min(10e3/lepton->pt(), 0.20); 
-		float var_R_30 = std::min(10e3/lepton->pt(), 0.30); 
-		float var_R_40 = std::min(10e3/lepton->pt(), 0.40);
-
-		if (is_electron){
-			std::set<const xAOD::TrackParticle*> electron_tracks = xAOD::EgammaHelpers::getTrackParticles((const xAOD::Egamma*)lepton, true);
-			for (auto trk : filtered_tracks) {
-			    if (!trk) continue;
-			    bool matches_own_track = false;
-			    for (auto own_track : electron_tracks)
-			        if (trk == own_track) matches_own_track = true;
-			    if (matches_own_track) continue;
-			    if (trk->vertex() && trk->vertex()!=primary_vertex) continue;
-			    if (trk->p4().DeltaR(lepton->p4()) < 0.20) calc_ptcone20 += trk->pt();
-			    if (trk->p4().DeltaR(lepton->p4()) < 0.30) calc_ptcone30 += trk->pt();
-			    if (trk->p4().DeltaR(lepton->p4()) < 0.40) calc_ptcone40 += trk->pt();
-			    if (trk->p4().DeltaR(lepton->p4()) < var_R_20) calc_ptvarcone20 += trk->pt();
-			    if (trk->p4().DeltaR(lepton->p4()) < var_R_30) calc_ptvarcone30 += trk->pt();
-			    if (trk->p4().DeltaR(lepton->p4()) < var_R_40) calc_ptvarcone40 += trk->pt();
-			}
-		}else{
-			xAOD::Muon::TrackParticleType type = xAOD::Muon::TrackParticleType::InnerDetectorTrackParticle;
-			auto own_track = ((xAOD::Muon*)lepton)->trackParticle(type);
-			for (auto trk : filtered_tracks) {
-			    if (!trk) continue;
-			    if (trk == own_track) continue;
-			    if (trk->p4().DeltaR(lepton->p4()) < 0.20) calc_ptcone20 += trk->pt();
-			    if (trk->p4().DeltaR(lepton->p4()) < 0.30) calc_ptcone30 += trk->pt();
-			    if (trk->p4().DeltaR(lepton->p4()) < 0.40) calc_ptcone40 += trk->pt();
-			    if (trk->p4().DeltaR(lepton->p4()) < var_R_20) calc_ptvarcone20 += trk->pt();
-			    if (trk->p4().DeltaR(lepton->p4()) < var_R_30) calc_ptvarcone30 += trk->pt();
-			    if (trk->p4().DeltaR(lepton->p4()) < var_R_40) calc_ptvarcone40 += trk->pt();
-			}
-
-		}
 
         bool has_associated_tracks = false;
         for (auto track : filtered_tracks) {
