@@ -297,7 +297,6 @@ int main (int argc, char *argv[]) {
 
 		if (is_electron){
 			std::set<const xAOD::TrackParticle*> electron_tracks = xAOD::EgammaHelpers::getTrackParticles((const xAOD::Egamma*)lepton, true);
-		cout<<__LINE__<<endl;
 			for (auto trk : filtered_tracks) {
 			    if (!trk) continue;
 			    bool matches_own_track = false;
@@ -313,7 +312,6 @@ int main (int argc, char *argv[]) {
 			    if (trk->p4().DeltaR(lepton->p4()) < var_R_40) calc_ptvarcone40 += trk->pt();
 			}
 		}else{
-		cout<<__LINE__<<endl;
 			xAOD::Muon::TrackParticleType type = xAOD::Muon::TrackParticleType::InnerDetectorTrackParticle;
 			auto own_track = ((xAOD::Muon*)lepton)->trackParticle(type);
 			for (auto trk : filtered_tracks) {
@@ -416,7 +414,6 @@ int main (int argc, char *argv[]) {
         //--- Get event
         if (entry_n%5 == 0) cout << "Processing event " << entry_n << "/" << entries << "\n";
         event.getEntry(entry_n);
-		cout<<__LINE__<<endl;
         //--- Get event objects
         const xAOD::TrackParticleContainer *tracks;
         const xAOD::VertexContainer *primary_vertices;
@@ -425,7 +422,6 @@ int main (int argc, char *argv[]) {
         const xAOD::CaloClusterContainer *calo_clusters;
         const xAOD::JetContainer *jets;
 
-		cout<<__LINE__<<endl;
         RETURN_CHECK(ALG, event.retrieve(tracks, "InDetTrackParticles"));
         RETURN_CHECK(ALG, event.retrieve(primary_vertices, "PrimaryVertices"));
         RETURN_CHECK(ALG, event.retrieve(electrons, "Electrons"));
@@ -433,10 +429,8 @@ int main (int argc, char *argv[]) {
         RETURN_CHECK(ALG, event.retrieve(calo_clusters, "CaloCalTopoClusters"));
         RETURN_CHECK(ALG, event.retrieve(jets, "AntiKt4EMTopoJets"));
 
-		cout<<__LINE__<<endl;
         const xAOD::Vertex *primary_vertex = primary_vertices->at(0);
 
-		cout<<__LINE__<<endl;
         //--- Filter objects
         vector<const xAOD::TrackParticle*> filtered_tracks = object_filters.filter_tracks(tracks, primary_vertex);
         vector<pair<const xAOD::Electron*, int>> filtered_electrons = object_filters.filter_electrons_truth_type(electrons);
@@ -448,7 +442,6 @@ int main (int argc, char *argv[]) {
         vector<const xAOD::CaloCluster*> filtered_calo_clusters = object_filters.filter_calo_clusters(calo_clusters);
         vector<const xAOD::Jet*> filtered_jets = object_filters.filter_jets(jets);
 
-		cout<<__LINE__<<endl;
         //--- Write event
         vector<pair<const xAOD::Electron*, int>> new_filtered_electrons;
         vector<pair<const xAOD::Muon*, int>> new_filtered_muons;
@@ -456,9 +449,7 @@ int main (int argc, char *argv[]) {
             const xAOD::Electron* electron = electron_info.first;
             truth_type = electron_info.second;
             pdgID = 11;
-		cout<<__LINE__<<endl;
             if (!process_lepton(electron, primary_vertex, filtered_tracks, filtered_calo_clusters, filtered_jets, true)) continue;
-		cout<<__LINE__<<endl;
             new_filtered_electrons.push_back(electron_info);
             unnormedTree->Fill();
         }
@@ -466,22 +457,17 @@ int main (int argc, char *argv[]) {
             const xAOD::Muon* muon = muon_info.first;
             truth_type = muon_info.second;
             pdgID = 13;
-		cout<<__LINE__<<endl;
             if (!process_lepton(muon, primary_vertex, filtered_tracks, filtered_calo_clusters, filtered_jets, false)) continue;
-		cout<<__LINE__<<endl;
             new_filtered_muons.push_back(muon_info);
             unnormedTree->Fill();
         }
-		cout<<__LINE__<<endl;
         update_cutflow(new_filtered_electrons, new_filtered_muons, 2);
-		cout<<__LINE__<<endl;
 
         //--- Additional cutflow step for comparison - what does a ptvarcone40/lep_pT cut identify as isolated?
         vector<pair<const xAOD::Electron*, int>> isolated_filtered_electrons;
         vector<pair<const xAOD::Muon*, int>> isolated_filtered_muons;
         float temp_ptvarcone40;
         float temp_lep_pT;
-		cout<<__LINE__<<endl;
         for (auto electron_info : new_filtered_electrons) {
             const xAOD::Electron* electron = electron_info.first;
             electron->isolation(temp_ptvarcone40,xAOD::Iso::ptvarcone40);
@@ -490,7 +476,6 @@ int main (int argc, char *argv[]) {
             if (temp_ptvarcone40/temp_lep_pT < 0.1)
                 isolated_filtered_electrons.push_back(electron_info);
         }
-		cout<<__LINE__<<endl;
         for (auto muon_info : new_filtered_muons) {
             const xAOD::Muon* muon = muon_info.first;
             muon->isolation(temp_ptvarcone40,xAOD::Iso::ptvarcone40);
@@ -499,7 +484,6 @@ int main (int argc, char *argv[]) {
             if (temp_ptvarcone40/temp_lep_pT < 0.1)
                 isolated_filtered_muons.push_back(muon_info);
         }
-		cout<<__LINE__<<endl;
         update_cutflow(isolated_filtered_electrons, isolated_filtered_muons, 3);
     }
 
