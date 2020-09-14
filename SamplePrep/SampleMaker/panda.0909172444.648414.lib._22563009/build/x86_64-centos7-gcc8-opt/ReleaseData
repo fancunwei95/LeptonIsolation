@@ -1,9 +1,0 @@
-[release_metadata]
-release:
-nightly name:Unknown
-project name:WorkDir
-nightly release:d6fa777
-date:2020-08-25T1742
-compiler:GNU-8.3.0
-cxxpath:/cvmfs/atlas.cern.ch/repo/sw/software/21.2/sw/lcg/releases/gcc/8.3.0-cebb0/x86_64-centos7/bin/g++
-cmake:3.14.3

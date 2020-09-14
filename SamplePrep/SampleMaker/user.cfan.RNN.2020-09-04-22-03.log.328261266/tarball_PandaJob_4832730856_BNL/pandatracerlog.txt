@@ -1,8 +1,0 @@
-2020-09-05 05:39:11.514378 : INFO    evecve: exe=ls  modified LD_PRELOAD=DOESNOTEXIST:/srv/workDir/0a409f1e-76e3-4aa1-b501-b36b41b2c7f1/$LIB/wrapper.so  cmd: sh
-2020-09-05 05:39:11.551698 : INFO    evecve: exe=ls  modified LD_PRELOAD=DOESNOTEXIST:/srv/workDir/0a409f1e-76e3-4aa1-b501-b36b41b2c7f1/$LIB/wrapper.so  cmd: sh
-2020-09-05 05:39:11.586636 : INFO    evecve: exe=ls  modified LD_PRELOAD=DOESNOTEXIST:/srv/workDir/0a409f1e-76e3-4aa1-b501-b36b41b2c7f1/$LIB/wrapper.so  cmd: sh
-2020-09-05 05:39:11.653439 : INFO    evecve: exe=ls  modified LD_PRELOAD=DOESNOTEXIST:/srv/workDir/0a409f1e-76e3-4aa1-b501-b36b41b2c7f1/$LIB/wrapper.so  cmd: sh
-2020-09-05 05:39:12.054638 : INFO    evecve: exe=ls  modified LD_PRELOAD=DOESNOTEXIST:/srv/workDir/0a409f1e-76e3-4aa1-b501-b36b41b2c7f1/$LIB/wrapper.so  cmd: sh
-2020-09-05 05:39:14.906958 : INFO    evecve: exe=ls  modified LD_PRELOAD=DOESNOTEXIST:/srv/workDir/0a409f1e-76e3-4aa1-b501-b36b41b2c7f1/$LIB/wrapper.so  cmd: sh
-2020-09-05 05:39:18.002022 : INFO    connect: 10.42.38.66:1096  cmd: SampleMaker
-2020-09-05 05:39:18.279103 : INFO    connect: 10.42.38.36:33284  cmd: SampleMaker

@@ -1,5 +1,0 @@
-# Target labels
- RNNSampleMaker
-# Source files and their labels
-/afs/cern.ch/user/c/cfan/LeptonIsolation/SamplePrep/SampleMaker/src/ObjectFilters.cxx
-/afs/cern.ch/user/c/cfan/LeptonIsolation/SamplePrep/SampleMaker/src/SampleMaker.cxx

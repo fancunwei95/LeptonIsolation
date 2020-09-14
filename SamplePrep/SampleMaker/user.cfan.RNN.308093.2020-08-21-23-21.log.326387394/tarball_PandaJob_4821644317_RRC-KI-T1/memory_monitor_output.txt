@@ -1,2 +1,0 @@
-Time	wtime	stime	utime	nprocs	nthreads	rchar	read_bytes	wchar	write_bytes	pss	rss	swap	vmem	rx_bytes	rx_packets	tx_bytes	tx_packets
-1598045443	12	3	1	7	7	11231002	857321472	458821	155648	1874	4748	0	44872	23864	31	1311	17

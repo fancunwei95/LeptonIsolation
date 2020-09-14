@@ -1,5 +1,0 @@
-# Target labels
- RNNSampleMaker
-# Source files and their labels
-/afs/cern.ch/user/c/cfan/LeptonIsolation/SamplePrep/SampleMaker/build/CMakeFiles/SampleMakerExeAttribSet
-/afs/cern.ch/user/c/cfan/LeptonIsolation/SamplePrep/SampleMaker/build/CMakeFiles/SampleMakerExeAttribSet.rule
