@@ -52,6 +52,7 @@ set(_common
   xAODBTaggingEfficiencyLib
   xAODJet
   xAODEventShape
+  IsolationSelectionLib
 )
 
 atlas_depends_on_subdirs(
@@ -70,3 +71,4 @@ atlas_add_executable( SampleMaker src/SampleMaker.cxx ${_common})
 # and submit them to the grid. If you're not looking to run on the
 # grid this is unneeded.
 atlas_cpack_setup()
+
